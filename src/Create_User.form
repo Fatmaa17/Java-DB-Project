@@ -195,7 +195,11 @@
         <Component class="javax.swing.JComboBox" name="txtutype">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
+              <StringArray count="3">
+                <StringItem index="0" value="Pharmacist"/>
+                <StringItem index="1" value="Doctor"/>
+                <StringItem index="2" value="Receptionst"/>
+              </StringArray>
             </Property>
           </Properties>
           <AuxValues>
@@ -220,6 +224,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Add"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

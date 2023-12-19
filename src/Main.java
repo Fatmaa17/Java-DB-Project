@@ -90,6 +90,11 @@ public class Main extends javax.swing.JFrame {
         jButton7.setBackground(new java.awt.Color(204, 204, 204));
         jButton7.setFont(new java.awt.Font("Baskerville Old Face", 1, 13)); // NOI18N
         jButton7.setText("Create User");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setBackground(new java.awt.Color(204, 204, 204));
         jButton8.setFont(new java.awt.Font("Baskerville Old Face", 1, 13)); // NOI18N
@@ -268,6 +273,15 @@ public class Main extends javax.swing.JFrame {
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+
+            Create_User u = new Create_User();
+            u.setVisible(true);
+                    
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments

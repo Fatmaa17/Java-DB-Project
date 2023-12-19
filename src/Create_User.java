@@ -1,3 +1,12 @@
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -15,6 +24,22 @@ public class Create_User extends javax.swing.JFrame {
     public Create_User() {
         initComponents();
     }
+    Connection con;
+    PreparedStatement pst;
+    
+    public void Connect()
+    {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/loyalhospital","root","aman#!852!#@@");
+           
+                    } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Create_User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Create_User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,6 +105,8 @@ public class Create_User extends javax.swing.JFrame {
             }
         });
 
+        txtutype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pharmacist", "Doctor", "Receptionst" }));
+
         jButton1.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
         jButton1.setText("Cancel");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -90,6 +117,11 @@ public class Create_User extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
         jButton3.setText("Add");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -175,6 +207,8 @@ public class Create_User extends javax.swing.JFrame {
     }//GEN-LAST:event_txtnameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        this.setVisible(false);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -185,6 +219,36 @@ public class Create_User extends javax.swing.JFrame {
     private void txtpasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtpasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtpasswordActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            Connect();
+            String name = txtname.getText();
+            String username = txtusername.getText();
+            String password = txtpassword.getText();
+            String usertype = txtutype.getSelectedItem().toString();
+            
+            pst = con.prepareStatement("insert into users(name,username,password,utype) values (?,?,?,?)");
+            pst.setString(1, name);
+            pst.setString(2, username);
+            pst.setString(3, password);
+            pst.setString(4, usertype);
+            
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(this,"User inserted 🎉");
+            
+            txtname.setText("");
+            txtusername.setText("");
+            txtpassword.setText("");
+            txtutype.setSelectedIndex(-1);
+            
+            txtname.requestFocus();
+            // TODO add your handling code here:
+        } catch (SQLException ex) {
+            Logger.getLogger(Create_User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
