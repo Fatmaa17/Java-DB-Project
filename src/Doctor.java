@@ -28,17 +28,23 @@ public class Doctor extends javax.swing.JFrame {
      */
     public Doctor() {
         initComponents();
-        Connect();
-        AutoID();
-        patient_table();
 
     }
-     public Doctor(int id,String uctype) {
+    int id;
+    String utype;
+
+    int newid;
+
+    public Doctor(int id, String utype) {
         initComponents();
+        this.id = id;
+        this.utype = utype;
+        newid = id;
+
+        //JOptionPane.showMessAageDialog(this, newid);
         Connect();
         AutoID();
-        patient_table();
-
+        doctor_table();
     }
     Connection con;
     PreparedStatement pst;
@@ -56,27 +62,31 @@ public class Doctor extends javax.swing.JFrame {
         }
     }
 
-    public void patient_table() {
+    public void doctor_table() {
         try {
-            pst = pst = con.prepareStatement("SELECT * FROM patient");
+            pst = pst = con.prepareStatement("SELECT * FROM doctor where log_id = ?");
+            pst.setInt(1, newid);
             rs = pst.executeQuery();
             ResultSetMetaData Rsm = rs.getMetaData();
             int c;
             c = Rsm.getColumnCount();
-            DefaultTableModel df = (DefaultTableModel)jTable1.getModel();
+            DefaultTableModel df = (DefaultTableModel) jTable1.getModel();
             df.setRowCount(0);
-            
-            while(rs.next())
-            {
+
+            while (rs.next()) {
                 Vector v2 = new Vector();
-                for(int i = 1; i<= c ; i++){
-                v2.add(rs.getString("patient_no"));
-                v2.add(rs.getString("name"));
-                v2.add(rs.getString("phone"));
-                v2.add(rs.getString("address"));
+                for (int i = 1; i <= c; i++) {
+                    v2.add(rs.getString("doctorno"));
+                    v2.add(rs.getString("name"));
+                    v2.add(rs.getString("special"));
+                    v2.add(rs.getString("qualification"));
+                    v2.add(rs.getString("fee"));
+                    v2.add(rs.getString("phone"));
+                    v2.add(rs.getString("room"));
+
                 }
                 df.addRow(v2);
-                
+
             }
 
         } catch (SQLException ex) {
@@ -88,7 +98,7 @@ public class Doctor extends javax.swing.JFrame {
     public void AutoID() {
         try {
             Statement s = con.createStatement();
-            rs = s.executeQuery("SELECT MAX(patient_no) AS max_id FROM Patient");
+            rs = s.executeQuery("SELECT MAX(doctorno) AS max_id FROM Doctor");
             rs.next(); // Move the cursor to the first row
 
             int nextID = 1; // Default value if no ID exists
@@ -102,9 +112,9 @@ public class Doctor extends javax.swing.JFrame {
                     ex.printStackTrace();
                 }
             }
-            lblpnum.setText("PS" + String.format("%03d", nextID));
+            lbldnum.setText("DS" + String.format("%03d", nextID));
         } catch (SQLException ex) {
-            Logger.getLogger(Patient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Doctor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -120,16 +130,16 @@ public class Doctor extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         lblpno = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        lblphone = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lbldname = new javax.swing.JLabel();
+        lblspe = new javax.swing.JLabel();
+        lblql = new javax.swing.JLabel();
         txtdname = new javax.swing.JTextField();
         txtspl = new javax.swing.JTextField();
-        lblpnum = new javax.swing.JLabel();
+        lbldnum = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         txtqul = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        lblfee = new javax.swing.JLabel();
         txtchfee = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtphone = new javax.swing.JTextField();
@@ -151,14 +161,14 @@ public class Doctor extends javax.swing.JFrame {
         lblpno.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
         lblpno.setText("Doctor No.");
 
-        jLabel2.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
-        jLabel2.setText("Doctor  Name");
+        lbldname.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
+        lbldname.setText("Doctor  Name");
 
-        lblphone.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
-        lblphone.setText("Specialization");
+        lblspe.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
+        lblspe.setText("Specialization");
 
-        jLabel4.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
-        jLabel4.setText("Qualification");
+        lblql.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
+        lblql.setText("Qualification");
 
         txtdname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -172,9 +182,9 @@ public class Doctor extends javax.swing.JFrame {
             }
         });
 
-        lblpnum.setFont(new java.awt.Font("Baskerville Old Face", 1, 18)); // NOI18N
-        lblpnum.setForeground(new java.awt.Color(255, 255, 255));
-        lblpnum.setText("jLabel5");
+        lbldnum.setFont(new java.awt.Font("Baskerville Old Face", 1, 18)); // NOI18N
+        lbldnum.setForeground(new java.awt.Color(255, 255, 255));
+        lbldnum.setText("jLabel5");
 
         jTable1.setFont(new java.awt.Font("Baskerville Old Face", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -206,8 +216,8 @@ public class Doctor extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
-        jLabel1.setText("Channel fee");
+        lblfee.setFont(new java.awt.Font("Baskerville Old Face", 1, 14)); // NOI18N
+        lblfee.setText("Channel fee");
 
         txtchfee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -234,14 +244,14 @@ public class Doctor extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
+                    .addComponent(lbldname)
                     .addComponent(lblpno, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel4)
-                        .addComponent(lblphone)
+                        .addComponent(lblql)
+                        .addComponent(lblspe)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblfee, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(49, 49, 49)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,7 +259,7 @@ public class Doctor extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtspl)
                         .addComponent(txtdname)
-                        .addComponent(lblpnum, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                        .addComponent(lbldnum, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                         .addComponent(txtqul)
                         .addComponent(txtchfee)
                         .addComponent(txtphone)))
@@ -263,23 +273,23 @@ public class Doctor extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblpno)
-                    .addComponent(lblpnum, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbldnum, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(lbldname)
                     .addComponent(txtdname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblphone)
+                    .addComponent(lblspe)
                     .addComponent(txtspl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(lblql)
                     .addComponent(txtqul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtchfee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblfee, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -305,6 +315,11 @@ public class Doctor extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Baskerville Old Face", 1, 13)); // NOI18N
         jButton4.setText("Update");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -336,29 +351,31 @@ public class Doctor extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(jButton4)
-                .addGap(37, 37, 37)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(700, 700, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(347, 347, 347)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 549, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addComponent(jButton4)
+                        .addGap(37, 37, 37)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -366,7 +383,7 @@ public class Doctor extends javax.swing.JFrame {
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -393,35 +410,61 @@ public class Doctor extends javax.swing.JFrame {
     private void txtdnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtdnameActionPerformed
-
+    private boolean roomExists(int roomNumber) throws SQLException {
+        PreparedStatement ps = con.prepareStatement("SELECT * FROM Doctor WHERE room = ?");
+        ps.setInt(1, roomNumber);
+        ResultSet rs = ps.executeQuery();
+        return rs.next(); // Returns true if room number exists, false otherwise
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
         try {
-            String pno = lblpnum.getText();
-            String pname = txtdname.getText();
-            String phone = txtspl.getText();
-            String address = txtaddress.getText();
-            if (pname.isEmpty() || phone.isEmpty() || address.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in all required fields!", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Exit the method if any required field is empty
-        }
+            String pno = lbldnum.getText();
+            String lbldname = txtdname.getText();
+            String lblspe = txtspl.getText();
+            String lblql = txtqul.getText();
+            String lblfee = txtchfee.getText();
+            String jLabel3 = txtphone.getText();
+            String jLabel6 = txtroom.getValue().toString();
+            int roomNumber = (int) txtroom.getValue();
 
-            pst = con.prepareStatement("insert into Patient(patient_no , name ,phone , address) values (? , ? , ? , ?)");
+            if (lbldname.isEmpty() || jLabel3.isEmpty() || pno.isEmpty() || lblspe.isEmpty() || lblql.isEmpty() || lblfee.isEmpty() || jLabel6.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill in all required fields!", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Exit the method if any required field is empty
+            }
+            if (roomNumber <= 0) {
+                JOptionPane.showMessageDialog(this, "Room number should be positive!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (roomExists(roomNumber)) {
+                JOptionPane.showMessageDialog(this, "Room already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            pst = con.prepareStatement("INSERT INTO Doctor(doctorno, name, special, qualification, fee, phone, room,log_id) VALUES (?, ?, ?, ?, ?, ?, ? , ?)");
             pst.setString(1, pno);
-            pst.setString(2, pname);
-            pst.setString(3, phone);
-            pst.setString(4, address);
-
+            pst.setString(2, lbldname);
+            pst.setString(3, lblspe);
+            pst.setString(4, lblql);
+            pst.setString(5, lblfee);
+            pst.setString(6, jLabel3);
+            pst.setString(7, jLabel6);
+            pst.setInt(8, newid);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Patient Inserted🎉");
+            JOptionPane.showMessageDialog(this, "Doctor Inserted🎉🎉");
 
             AutoID();
             txtdname.setText("");
             txtspl.setText("");
-            txtaddress.setText("");
+            txtqul.setText("");
+            txtchfee.setText("");
+            txtphone.setText("");
+            txtroom.setValue(0);
+
             txtdname.requestFocus();
-            
-            patient_table();
+
+            doctor_table();
 
         } catch (SQLException ex) {
             Logger.getLogger(Patient.class.getName()).log(Level.SEVERE, null, ex);
@@ -430,45 +473,54 @@ public class Doctor extends javax.swing.JFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
 
-        DefaultTableModel dl = (DefaultTableModel)jTable1.getModel();
+        DefaultTableModel dl = (DefaultTableModel) jTable1.getModel();
         int SelectIndex = jTable1.getSelectedRow();
-        
-        lblpnum.setText(dl.getValueAt(SelectIndex, 0).toString());
+
+        lbldnum.setText(dl.getValueAt(SelectIndex, 0).toString());
         txtdname.setText(dl.getValueAt(SelectIndex, 1).toString());
         txtspl.setText(dl.getValueAt(SelectIndex, 2).toString());
-        txtaddress.setText(dl.getValueAt(SelectIndex, 3).toString());
-        
+        txtqul.setText(dl.getValueAt(SelectIndex, 3).toString());
+        txtchfee.setText(dl.getValueAt(SelectIndex, 4).toString());
+        txtphone.setText(dl.getValueAt(SelectIndex, 5).toString());
+        txtroom.setValue(Integer.parseInt(dl.getValueAt(SelectIndex, 6).toString()));
+
         jButton3.setEnabled(false);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-         try {
-            String pno = lblpnum.getText();
-            String pname = txtdname.getText();
-            String phone = txtspl.getText();
-            String address = txtaddress.getText();
-            if (pname.isEmpty() || phone.isEmpty() || address.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in all required fields!", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Exit the method if any required field is empty
-        }
+        try {
+            String pno = lbldnum.getText();
+            String lbldname = txtdname.getText();
+            String lblspe = txtspl.getText();
+            String lblql = txtqul.getText();
+            String lblfee = txtchfee.getText();
+            String jLabel3 = txtphone.getText();
+            String jLabel6 = txtroom.getValue().toString();
 
-            pst = con.prepareStatement("UPDATE Patient set name = ? , phone = ? , address = ? WHERE patient_no = ?");
-            pst.setString(1, pname);
-            pst.setString(2, phone);
-            pst.setString(3, address);
-            pst.setString(4, pno);
-
+            pst = con.prepareStatement("UPDATE Doctor SET doctorno = ?, name = ?, special = ?, qualification = ?, fee = ?, phone = ?, room = ? WHERE doctorno = ?");
+            pst.setString(1, pno);
+            pst.setString(2, lbldname);
+            pst.setString(3, lblspe);
+            pst.setString(4, lblql);
+            pst.setString(5, lblfee);
+            pst.setString(6, jLabel3);
+            pst.setString(7, jLabel6);
+            pst.setString(8, pno); // Assuming pno is the identifier for the doctor to be updated
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Patient Updated🎉");
+            JOptionPane.showMessageDialog(this, "Doctor Updated🎉");
 
             AutoID();
             txtdname.setText("");
             txtspl.setText("");
-            txtaddress.setText("");
-            
-            patient_table();
-            
+            txtqul.setText("");
+            txtchfee.setText("");
+            txtphone.setText("");
+            txtroom.setValue(0);
+
+            txtdname.requestFocus();
+
+            doctor_table();
             jButton3.setEnabled(true);
 
         } catch (SQLException ex) {
@@ -480,37 +532,39 @@ public class Doctor extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 
         try {
-            String pno = lblpnum.getText();
+            String pno = lbldnum.getText();
             
-            pst = con.prepareStatement("DELETE FROM Patient WHERE patient_no = ?");
-            
-            pst.setString(1, pno);
 
+            pst = con.prepareStatement("DELETE FROM Doctor WHERE doctorno = ?");
+            pst.setString(1, pno);
             pst.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Patient Deleted🎉");
+            JOptionPane.showMessageDialog(this, "Doctor Info Deleted😥");
 
             AutoID();
             txtdname.setText("");
             txtspl.setText("");
-            txtaddress.setText("");
-            
-            patient_table();
-            
+            txtqul.setText("");
+            txtchfee.setText("");
+            txtphone.setText("");
+            txtroom.setValue(0);
+
+            txtdname.requestFocus();
+
+            doctor_table();
             jButton3.setEnabled(true);
 
         } catch (SQLException ex) {
             Logger.getLogger(Patient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
 
-
-
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void txtqulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtqulActionPerformed
@@ -524,6 +578,11 @@ public class Doctor extends javax.swing.JFrame {
     private void txtphoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtphoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtphoneActionPerformed
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+
+
+    }//GEN-LAST:event_jButton4MouseClicked
 
     /**
      * @param args the command line arguments
@@ -565,19 +624,19 @@ public class Doctor extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JLabel lblphone;
+    private javax.swing.JLabel lbldname;
+    private javax.swing.JLabel lbldnum;
+    private javax.swing.JLabel lblfee;
     private javax.swing.JLabel lblpno;
-    private javax.swing.JLabel lblpnum;
+    private javax.swing.JLabel lblql;
+    private javax.swing.JLabel lblspe;
     private javax.swing.JTextField txtchfee;
     private javax.swing.JTextField txtdname;
     private javax.swing.JTextField txtphone;

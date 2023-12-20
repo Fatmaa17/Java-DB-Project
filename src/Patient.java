@@ -37,6 +37,10 @@ public class Patient extends javax.swing.JFrame {
     PreparedStatement pst;
     ResultSet rs;
 
+    Patient(int idd, String uctype) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public void Connect() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
