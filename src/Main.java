@@ -15,7 +15,9 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        
     }
+    
     int newid;
     String uname;
     String usertype;
@@ -27,8 +29,45 @@ public class Main extends javax.swing.JFrame {
         this.usertype = utype;
         jLabel7.setText(utype);
         this.newid = id;
+        String uctype =jLabel7.getText();
+        if(uctype.equals("Doctor")){
+        jButton2.setVisible(false);
+        jButton4.setVisible(false);
+        jButton8.setVisible(false);
+        jButton6.setVisible(false);
+        jButton7.setVisible(false);
+        }
+        else if(uctype.equals("Receptionist")){
+            
+        jButton3.setVisible(false);
+        jButton8.setVisible(false);
+        
+      
+        }
+        else if(uctype.equals("Pharmacist")){
+        
+        jButton2.setVisible(false);
+        jButton3.setVisible(false);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
+        jButton7.setVisible(false);
+        
+        
+        
+        }
+        
+        
     }
-
+   /*this.uname=username;
+        jLabel.setText=utype;
+        this.usertype=utype;
+        jLabel5.setText(usertype);
+        this.newid=id;
+         
+        String uctype =jLabel5.getText();
+        if(uctype.equals(Doctor)){
+            jButton1.setVisible(false);
+             jButton3.setVisible(false)
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -111,6 +150,11 @@ public class Main extends javax.swing.JFrame {
         jButton8.setBackground(new java.awt.Color(204, 204, 204));
         jButton8.setFont(new java.awt.Font("Baskerville Old Face", 1, 13)); // NOI18N
         jButton8.setText("View Presciption");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jButton9.setBackground(new java.awt.Color(204, 204, 204));
         jButton9.setFont(new java.awt.Font("Baskerville Old Face", 1, 13)); // NOI18N
@@ -203,13 +247,15 @@ public class Main extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(72, 72, 72)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(59, 59, 59)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel7))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(59, 59, 59)
+                        .addComponent(jLabel6)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -269,10 +315,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-Patient p = new Patient();
-p.setVisible(true);
+        // TODO add your handling code here:
         
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -295,6 +339,10 @@ p.setVisible(true);
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments
